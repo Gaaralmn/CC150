@@ -91,7 +91,8 @@ public class LinkedLists {
 		}
 		return p2;
 	}
-
+ 
+ 	/* Linked Lists 2.3 */ 
 	public void deleteMiddle(Node mid) {
 		if((mid == null)||(mid.next == null)) {
 
@@ -100,7 +101,89 @@ public class LinkedLists {
 			mid.next = mid.next.next;
 		}
 	}
-	
+
+	/* Linked Lists 2.4  Write code to partition a linked list around a value x, such that all nodes less than
+	 * x come before all nodes greater that or equal to x. */	
+	public Node listPartition(Node n, int x) {
+		/* Can also just define 2 Node reference just before start and after start. */
+		Node beforestart = null;
+		Node beforeend  = null;
+		Node afterstart = null;
+		Node afterend = null;
+		while(n != null) {
+			Node next = n.next;
+			n.next = null;
+			if(n.data < x) {
+				if(beforestart == null) {
+					beforestart = n;
+					beforeend = beforestart;
+				} else {
+					beforeend.next = n;
+					beforeend = n;
+				}
+			} else {
+				if(afterstart == null) {
+					afterstart = n;
+					afterend = afterstart;
+				} else {
+					afterend.next = n;
+					afterend = n;
+				}
+			}
+			n = next;
+		}
+		if(beforestart == null) {
+			return afterstart;
+		}
+		beforeend.next = afterstart;
+		return beforestart;
+	}
+
+	/* Linked Lists 2.5  Refer to Leetcode add two numbers. */
+	public Node addNumbers(Node n1, Node n2) {
+		Node n = new Node(0, null);
+		Node head = n;
+		int carry = 0;
+		while((n1 != null)||(n2 != null)) {
+			int x = (n1 == null) ? 0 : n1.data;
+			int y = (n2 == null) ? 0 : n2.data;
+			int sum = x + y + carry;
+			int digit = sum % 10;
+			carry = sum / 10;
+			n.next = new Node(digit, null);
+			n = n.next;
+			if(n1 != null) n1 = n1.next;
+			if(n2 != null) n2 = n2.next;
+		}
+		if(carry != 0) {
+			n.next = new Node(carry, null);
+		}
+		return head.next;
+	}
+
+	public Node findLoopstart(Node n) {
+		Node slow = n;
+		Node fast = n;
+
+		while(fast != null && fast.next != null) {
+			slow = slow.next;
+			fast = fast.next.next;
+			if(fast == slow) {
+				break;
+			}
+		}
+
+		if(fast == null || fast.next == null) {
+			return null;
+		}
+
+		fast = n;
+		while(slow != fast) {
+			slow = slow.next;
+			fast = fast.next;
+		}
+		return fast;
+	}
 	public void printNode(Node n) {
 		do {
 			System.out.println(n.data);
@@ -111,24 +194,26 @@ public class LinkedLists {
 	}
 	public static void main(String[] args) {
 		LinkedLists L = new LinkedLists();
-		L.head = new Node(0,null);
+		L.head = new Node(0, null);
 		Node n1 = new Node(1, null);
 		L.head.setNext(n1);
-		Node n2 = new Node(2, null);
+		Node n2 = new Node(3, null);
 		n1.setNext(n2);
 		Node n3 = new Node(2, null);
 		n2.setNext(n3);
-		Node n4 = new Node(3, null);
+		Node n4 = new Node(7, null);
 		n3.setNext(n4);
-		Node n5 = new Node(3, null);
+		Node n5 = new Node(5, null);
 		n4.setNext(n5);
 		Node n6 = new Node(4, null);
 		n5.setNext(n6);
-		L.printNode(L.head);
+		n6.setNext(n2);
+		//L.printNode(L.head);
 		// IntWrapper i = new IntWrapper();
 		//Node j = L.findkthTolast2(L.head, 7);
-		L.deleteMiddle(n3);
-		L.printNode(L.head);
-		//System.out.println(i.value);
+		//L.listPartition(L.head, 5);
+		Node loopstart = L.findLoopstart(L.head);
+		System.out.println(loopstart.data); // 3 2 7 5 4 
+		//System.out.println(i.value);		   // 0 1 3 2 7 5 4
 	}
 }

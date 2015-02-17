@@ -184,6 +184,32 @@ public class LinkedLists {
 		}
 		return fast;
 	}
+
+	public boolean findPalindrome(Node n) {
+		Node slow = n;
+		Node fast = n;
+		Stack<Node> stack = new Stack<Node>();
+
+		while(fast != null && fast.next != null) {
+			stack.push(slow);
+			slow = slow.next;
+			fast = fast.next.next;
+		}
+
+		if(slow != null) {
+			slow = slow.next;
+		}
+
+		while(slow != null) {
+			Node tmp = stack.pop();
+			if(tmp.data != slow.data) {
+				return false;
+			}
+			slow = slow.next;
+		}
+		return true;
+	}
+
 	public void printNode(Node n) {
 		do {
 			System.out.println(n.data);
@@ -197,23 +223,23 @@ public class LinkedLists {
 		L.head = new Node(0, null);
 		Node n1 = new Node(1, null);
 		L.head.setNext(n1);
-		Node n2 = new Node(3, null);
+		Node n2 = new Node(2, null);
 		n1.setNext(n2);
 		Node n3 = new Node(2, null);
 		n2.setNext(n3);
-		Node n4 = new Node(7, null);
+		Node n4 = new Node(3, null);
 		n3.setNext(n4);
-		Node n5 = new Node(5, null);
+		Node n5 = new Node(1, null);
 		n4.setNext(n5);
-		Node n6 = new Node(4, null);
+		Node n6 = new Node(0, null);
 		n5.setNext(n6);
-		n6.setNext(n2);
-		//L.printNode(L.head);
+		//n6.setNext(n2);
+		L.printNode(L.head);
 		// IntWrapper i = new IntWrapper();
 		//Node j = L.findkthTolast2(L.head, 7);
 		//L.listPartition(L.head, 5);
-		Node loopstart = L.findLoopstart(L.head);
-		System.out.println(loopstart.data); // 3 2 7 5 4 
+		//Node loopstart = L.findLoopstart(L.head);
+		System.out.println(L.findPalindrome(L.head)); // 3 2 7 5 4 
 		//System.out.println(i.value);		   // 0 1 3 2 7 5 4
 	}
 }
